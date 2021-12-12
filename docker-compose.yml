@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mtaapi:
+    container_name: mtaapi
+    image: dmintz7/mtaapi
+    build: .
+    ports:
+      - 8088:80
+    environment:
+      - WEB_ROOT=/mta_api/
+      - TIME_ZONE=America/New_York
+      - LOG_LEVEL=DEBUG
+      - MAX_MINUTES=600
+      - THREADED=True
+      - MTA_KEY=8VUIen0pKEawunxMgJ9CRLyEEx0JCB6xYlK9OV90
+    restart: unless-stopped

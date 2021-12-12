@@ -1,0 +1,24 @@
+{
+    "1": {
+        "id": "1",
+        "name": "68 St-Hunter College",
+        "stops": ["628"]
+    },
+    "2": {
+        "id": "2",
+        "name": "Lexington Av/59 St",
+        "stops": ["629", "R11"]
+    },
+    "3": {
+        "id": "3",
+        "name": "Lexington Av/63 St",
+        "stops": ["B08"]
+    },
+    "4": {
+        "id": "4",
+        "name": "72 St",
+        "stops": ["Q03"]
+    }
+}
+
+TAKE STOPS AS INPUT AND "CREATE JSON"
