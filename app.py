@@ -9,12 +9,16 @@
 	:license: BSD, see LICENSE for more details.
 """
 
-from mtapi.mtapi import Mtapi
-from flask import Flask, request, jsonify, render_template, abort, redirect
-from flask.json import JSONEncoder
+import logging
+import os
+import sys
 from datetime import datetime
-from functools import wraps, reduce
-import logging, os, sys
+from functools import reduce
+
+from flask import Flask, jsonify, abort
+from flask.json import JSONEncoder
+
+from mtapi.mtapi import Mtapi
 
 app = Flask(__name__)
 
@@ -28,6 +32,7 @@ logger.addHandler(consoleHandler)
 logger.setLevel(os.environ['LOG_LEVEL'])
 logging.getLogger("requests").setLevel(logging.WARNING)
 
+
 class CustomJSONEncoder(JSONEncoder):
 
 	def default(self, obj):
@@ -40,6 +45,8 @@ class CustomJSONEncoder(JSONEncoder):
 		else:
 			return list(iterable)
 		return JSONEncoder.default(self, obj)
+
+
 app.json_encoder = CustomJSONEncoder
 
 mta = Mtapi(
@@ -50,14 +57,16 @@ mta = Mtapi(
 	expires_seconds=os.environ['CACHE_SECONDS'],
 	threaded=os.environ['THREADED'])
 
+
 @app.route('/')
 @app.route(os.environ['WEB_ROOT'] + '/')
 def index():
 	try:
 		data = mta.get_data()
 		return _make_envelope(data)
-	except KeyError as e:
+	except KeyError:
 		abort(404)
+
 
 def _envelope_reduce(a, b):
 	if a['last_update'] and b['last_update']:
@@ -66,6 +75,7 @@ def _envelope_reduce(a, b):
 		return a
 	else:
 		return b
+
 
 def _make_envelope(data):
 	time = None
@@ -76,7 +86,3 @@ def _make_envelope(data):
 		'data': data,
 		'updated': time
 		})
-
-# if __name__ == '__main__':
-	# app.run(host='0.0.0.0', port=8088, use_reloader=False)
-
